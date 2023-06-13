@@ -113,12 +113,12 @@ class GenericCodeBlock(dict):
     def __call__(self):
         pass
 
-    def add(self, text,line_end="\r\n"):
+    def add(self, text,line_end="\n"):
         self[self.index] = SingleCodeLine(text,line_end)
         self.index = self.index + 1
 
     def code(self, indent_level = 0):
-        return DictCode(self,indent_level) + "\r\n"
+        return DictCode(self,indent_level) + "\n"
 
 # ------------------- Library -----------------------
 
@@ -137,9 +137,9 @@ class PackageObj:
         indent_tmp = 1
         if (libname == "work"):
             indent_tmp = 0
-        hdl_code = hdl_code + indent(indent_tmp) + ("use %s.%s.%s;\r\n" % (libname, self.name, self.operator))
+        hdl_code = hdl_code + indent(indent_tmp) + ("use %s.%s.%s;\n" % (libname, self.name, self.operator))
         if (libname == "work"):
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         return hdl_code
 
 
@@ -175,9 +175,9 @@ class LibraryObj:
 
     def code(self, indent_level=0):
         hdl_code = ""
-        hdl_code = hdl_code + indent(indent_level + 0) + ("library %s;\r\n" % self.name)
+        hdl_code = hdl_code + indent(indent_level + 0) + ("library %s;\n" % self.name)
         for j in self.context:
-            hdl_code = hdl_code + indent(indent_level + 1) + ("context %s.%s;\r\n" % (self.name, self.context[j].name))
+            hdl_code = hdl_code + indent(indent_level + 1) + ("context %s.%s;\n" % (self.name, self.context[j].name))
         hdl_code = hdl_code + self.package.code(self.name)
         return hdl_code
 
@@ -187,7 +187,7 @@ class LibraryList(dict):
         self[name] = LibraryObj(name)
 
     def code(self, indent_level=0):
-        return DictCode(self) + "\r\n"
+        return DictCode(self) + "\n"
 
 
 # ------------------- Generic -----------------------
@@ -202,9 +202,9 @@ class GenericObj:
 
     def code(self, indent_level=0):
         if self.value:
-            hdl_code = indent(indent_level) + ("%s : %s := %s;\r\n" % (self.name, self.type, self.value))
+            hdl_code = indent(indent_level) + ("%s : %s := %s;\n" % (self.name, self.type, self.value))
         else:
-            hdl_code = indent(indent_level) + ("%s : %s;\r\n" % (self.name, self.type))
+            hdl_code = indent(indent_level) + ("%s : %s;\n" % (self.name, self.type))
         return hdl_code
 
 
@@ -229,9 +229,9 @@ class PortObj:
 
     def code(self, indent_level=0):
         if ((self.value is None) or self.direction == "out"):
-            hdl_code = indent(indent_level) + ("%s : %s %s;\r\n" % (self.name, self.direction, self.type))
+            hdl_code = indent(indent_level) + ("%s : %s %s;\n" % (self.name, self.direction, self.type))
         elif (self.direction == "in" or self.direction == "inout"):
-            hdl_code = indent(indent_level) + ("%s : %s %s := %s;\r\n" %
+            hdl_code = indent(indent_level) + ("%s : %s %s := %s;\n" %
                                               (self.name, self.direction, self.type, self.value))
         return hdl_code
 
@@ -259,8 +259,8 @@ class IncompleteTypeObj:
 
     def code(self):
         hdl_code = ""
-        hdl_code = "type %s;\r\n" % self.name
-        hdl_code = hdl_code + "\r\n"
+        hdl_code = "type %s;\n" % self.name
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 
@@ -279,7 +279,7 @@ class EnumerationTypeObj:
         pass
         if input:
             self.newLine = True
-            self.endLine = ",\r\n"
+            self.endLine = ",\n"
         else:
             self.newLine = False
             self.endLine = ", "
@@ -298,13 +298,13 @@ class EnumerationTypeObj:
         if self.typeElement:
             hdl_code =  hdl_code + indent(indent_level) + "type %s is ( " % self.name
             if self.newLine:
-                hdl_code = hdl_code + "\r\n"
+                hdl_code = hdl_code + "\n"
                 hdl_code = hdl_code + "%s" % VHDLenum(self.typeElement, indent_level+1)
                 hdl_code = hdl_code + indent(indent_level)
             else:
                 hdl_code = hdl_code + "%s" % VHDLenum(self.typeElement)
-            hdl_code = hdl_code + ");\r\n"
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + ");\n"
+            hdl_code = hdl_code + "\n"
         return hdl_code
 
 
@@ -316,8 +316,8 @@ class ArrayTypeObj:
 
     def code(self):
         hdl_code = ""
-        hdl_code = indent(1) + "type %s is array (%s) of %s;\r\n" % (self.name, self.arrayRange, self.arrayType)
-        hdl_code = hdl_code + "\r\n"
+        hdl_code = indent(1) + "type %s is array (%s) of %s;\n" % (self.name, self.arrayRange, self.arrayType)
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 
@@ -353,15 +353,15 @@ class SubTypeObj:
 
     def code(self):
         hdl_code = ""
-        hdl_code = hdl_code + indent(1) + "subtype %s is %s (\r\n" % (self.name, self.ofType)
+        hdl_code = hdl_code + indent(1) + "subtype %s is %s (\n" % (self.name, self.ofType)
         i = 0
         for j in self.element:
             i += 1
             if (i == len(self.element)):
-                hdl_code = hdl_code + indent(2) + "%s (%s)); \n\r" % (self.element[j].name, self.element[j].type)
+                hdl_code = hdl_code + indent(2) + "%s (%s)); \n" % (self.element[j].name, self.element[j].type)
             else:
-                hdl_code = hdl_code + indent(2) + "%s (%s),\n\r" % (self.element[j].name, self.element[j].type)
-        hdl_code = hdl_code + "\r\n"
+                hdl_code = hdl_code + indent(2) + "%s (%s),\n" % (self.element[j].name, self.element[j].type)
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 
@@ -392,7 +392,7 @@ class ConstantObj:
         self.value = value
 
     def code(self, indent_level=0):
-        return indent(indent_level + 1) + "constant %s : %s := %s;\r\n" % (self.name, self.type, self.value)
+        return indent(indent_level + 1) + "constant %s : %s := %s;\n" % (self.name, self.type, self.value)
 
 
 class ConstantList(dict):
@@ -417,7 +417,7 @@ class RecordConstantObj(RecordTypeObj):
 
     def code(self):
         hdl_code = ""
-        hdl_code = hdl_code + "constant %s : %s := (\r\n" % (self.name, self.recordName)
+        hdl_code = hdl_code + "constant %s : %s := (\n" % (self.name, self.recordName)
         i = 0
         for j in self.element:
             i += 1
@@ -426,11 +426,11 @@ class RecordConstantObj(RecordTypeObj):
             else:
                 init = self.element[j].init
             if (i == len(self.element)):
-                hdl_code = hdl_code + indent(1) + "%s => %s\n\r" % (self.element[j].name, init)
+                hdl_code = hdl_code + indent(1) + "%s => %s\n" % (self.element[j].name, init)
             else:
-                hdl_code = hdl_code + indent(1) + "%s => %s,\n\r" % (self.element[j].name, init)
-        hdl_code = hdl_code + ");\r\n"
-        hdl_code = hdl_code + "\r\n"
+                hdl_code = hdl_code + indent(1) + "%s => %s,\n" % (self.element[j].name, init)
+        hdl_code = hdl_code + ");\n"
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 class CustomTypeConstantList(dict):
@@ -458,9 +458,9 @@ class SignalObj:
 
     def code(self, indent_level=0):
         if self.value:
-            return indent(indent_level + 1) + ("signal %s : %s := %s;\r\n" % (self.name, self.type, self.value))
+            return indent(indent_level + 1) + ("signal %s : %s := %s;\n" % (self.name, self.type, self.value))
         else:
-            return indent(indent_level + 1) + ("signal %s : %s;\r\n" % (self.name, self.type))
+            return indent(indent_level + 1) + ("signal %s : %s;\n" % (self.name, self.type))
 
 
 class SignalList(dict):
@@ -485,9 +485,9 @@ class VariableObj:
 
     def code(self, indent_level=0):
         if self.init != "undefined":
-            return indent(1) + ("variable %s : %s := %s;\r\n" % (self.name, self.type, self.init))
+            return indent(1) + ("variable %s : %s := %s;\n" % (self.name, self.type, self.init))
         else:
-            return indent(1) + ("variable %s : %s;\r\n" % (self.name, self.type))
+            return indent(1) + ("variable %s : %s;\n" % (self.name, self.type))
 
 
 class VariableList(dict):
@@ -516,44 +516,44 @@ class FunctionObj:
         self.genericInstance = InstanceObjList()
 
     def new(self, newName):
-        hdl_code = "function %s is new %s\r\n" % (newName, self.name)
-        hdl_code = hdl_code + indent(1)+"generic (\r\n"
+        hdl_code = "function %s is new %s\n" % (newName, self.name)
+        hdl_code = hdl_code + indent(1)+"generic (\n"
         # todo: generic types here.
         if not self.genericInstance:
             for item in self.genericInstance:
                 self.genericInstance.add(item, "<new value>")
         hdl_code = hdl_code + self.genericInstance.code()
-        hdl_code = hdl_code + indent(1)+");\r\n"
+        hdl_code = hdl_code + indent(1)+");\n"
 
     def declaration(self):
         hdl_code = self._code()
-        hdl_code = hdl_code + indent(0) + ("return %s;\r\n" % self.returnType)
+        hdl_code = hdl_code + indent(0) + ("return %s;\n" % self.returnType)
         return hdl_code
 
     def _code(self):
         hdl_code = indent(0) + ("function %s" % self.name)
         if (self.generic | self.customTypes):
-            hdl_code = hdl_code + ("\r\n")
-            hdl_code = hdl_code + indent(1) + ("generic (\r\n")
+            hdl_code = hdl_code + ("\n")
+            hdl_code = hdl_code + indent(1) + ("generic (\n")
             if (self.customTypes):
                 hdl_code = hdl_code + self.customTypes.code()
             if (self.generic):
                 hdl_code = hdl_code + self.generic.code()
-            hdl_code = hdl_code + indent(1) + (")\r\n")
+            hdl_code = hdl_code + indent(1) + (")\n")
             hdl_code = hdl_code + indent(1) + ("parameter")
         if (self.parameter):
-            hdl_code = hdl_code + indent(1) + (" (\r\n")
+            hdl_code = hdl_code + indent(1) + (" (\n")
             hdl_code = hdl_code + self.parameter.code()
-            hdl_code = hdl_code + indent(1) + (")\r\n")
+            hdl_code = hdl_code + indent(1) + (")\n")
         return hdl_code
 
     def code(self):
         hdl_code = self._code()
-        hdl_code = hdl_code + indent(0) + ("return %s is\r\n")
+        hdl_code = hdl_code + indent(0) + ("return %s is\n")
         hdl_code = hdl_code + self.variable.code()
-        hdl_code = hdl_code + indent(0) + ("begin\r\n")
+        hdl_code = hdl_code + indent(0) + ("begin\n")
         hdl_code = hdl_code + self.functionBody.code(1)
-        hdl_code = hdl_code + indent(0) + ("end %s;\r\n" % self.name)
+        hdl_code = hdl_code + indent(0) + ("end %s;\n" % self.name)
         return hdl_code
 
 
@@ -607,25 +607,25 @@ class ComponentObj:
 
     def code(self, indent_level=0):
         hdl_code = ""
-        hdl_code = hdl_code + indent(1) + ("component %s is\r\n" % self.name)
+        hdl_code = hdl_code + indent(1) + ("component %s is\n" % self.name)
         if (self.generic):
-            hdl_code = hdl_code + indent(2) + ("generic (\r\n")
+            hdl_code = hdl_code + indent(2) + ("generic (\n")
             hdl_code = hdl_code + self.generic.code(3)
-            hdl_code = hdl_code + indent(2) + (");\r\n")
+            hdl_code = hdl_code + indent(2) + (");\n")
         else:
-            hdl_code = hdl_code + indent(2) + ("--generic (\r\n")
-            hdl_code = hdl_code + indent(3) + ("--generic_declaration_tag\r\n")
-            hdl_code = hdl_code + indent(2) + ("--);\r\n")
+            hdl_code = hdl_code + indent(2) + ("--generic (\n")
+            hdl_code = hdl_code + indent(3) + ("--generic_declaration_tag\n")
+            hdl_code = hdl_code + indent(2) + ("--);\n")
         if (self.port):
-            hdl_code = hdl_code + indent(2) + ("port (\r\n")
+            hdl_code = hdl_code + indent(2) + ("port (\n")
             hdl_code = hdl_code + self.port.code(3)
-            hdl_code = hdl_code + indent(2) + (");\r\n")
+            hdl_code = hdl_code + indent(2) + (");\n")
         else:
-            hdl_code = hdl_code + indent(2) + ("--port (\r\n")
-            hdl_code = hdl_code + indent(3) + ("--port_declaration_tag\r\n")
-            hdl_code = hdl_code + indent(2) + ("--);\r\n")
-        hdl_code = hdl_code + indent(1) + ("end component;\r\n")
-        hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + indent(2) + ("--port (\n")
+            hdl_code = hdl_code + indent(3) + ("--port_declaration_tag\n")
+            hdl_code = hdl_code + indent(2) + ("--);\n")
+        hdl_code = hdl_code + indent(1) + ("end component;\n")
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 
@@ -690,21 +690,21 @@ class InstanceObj:
     def code(self, indent_level=2):
         assign_gen_code = GenericCodeBlock()
         assign_port_code = GenericCodeBlock()
-        hdl_code = indent(indent_level) + ("%s : %s\r\n" % (self.instance_name, self.component_name) )
+        hdl_code = indent(indent_level) + ("%s : %s\n" % (self.instance_name, self.component_name) )
         if (self.generic):
-            hdl_code = hdl_code + indent(indent_level+1) + ("generic map (\r\n")
+            hdl_code = hdl_code + indent(indent_level+1) + ("generic map (\n")
             for j in self.generic:
-                assign_gen_code.add(indent(indent_level+2) + j + " => " + self.generic[j].assign_value,",\r\n")
+                assign_gen_code.add(indent(indent_level+2) + j + " => " + self.generic[j].assign_value,",\n")
             hdl_code = hdl_code + VHDLenum(assign_gen_code)
 
         if (self.port):
-            hdl_code = hdl_code + indent(indent_level+1) + (")\r\n")
-            hdl_code = hdl_code + indent(indent_level+1) + ("port map (\r\n")
+            hdl_code = hdl_code + indent(indent_level+1) + (")\n")
+            hdl_code = hdl_code + indent(indent_level+1) + ("port map (\n")
             for j in self.port:
-                assign_port_code.add(indent(indent_level+2) + j + " => " + self.port[j].assign_value,",\r\n")
+                assign_port_code.add(indent(indent_level+2) + j + " => " + self.port[j].assign_value,",\n")
             hdl_code = hdl_code + VHDLenum(assign_port_code)
-        hdl_code = hdl_code + indent(2) + (");\r\n")
-        hdl_code = hdl_code + "\r\n"
+        hdl_code = hdl_code + indent(2) + (");\n")
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 class InstanceList(dict):
@@ -729,25 +729,25 @@ class Entity:
         self.port = PortList()
 
     def code(self, indent_level=0):
-        hdl_code = indent(0) + ("entity %s is\r\n" % self.name)
+        hdl_code = indent(0) + ("entity %s is\n" % self.name)
         if (self.generic):
-            hdl_code = hdl_code + indent(1) + ("generic (\r\n")
+            hdl_code = hdl_code + indent(1) + ("generic (\n")
             hdl_code = hdl_code + self.generic.code(2)
-            hdl_code = hdl_code + indent(1) + (");\r\n")
+            hdl_code = hdl_code + indent(1) + (");\n")
         else:
-            hdl_code = hdl_code + indent(1) + ("--generic (\r\n")
-            hdl_code = hdl_code + indent(2) + ("--generic_declaration_tag\r\n")
-            hdl_code = hdl_code + indent(1) + ("--);\r\n")
+            hdl_code = hdl_code + indent(1) + ("--generic (\n")
+            hdl_code = hdl_code + indent(2) + ("--generic_declaration_tag\n")
+            hdl_code = hdl_code + indent(1) + ("--);\n")
         if (self.port):
-            hdl_code = hdl_code + indent(1) + ("port (\r\n")
+            hdl_code = hdl_code + indent(1) + ("port (\n")
             hdl_code = hdl_code + self.port.code(2)
-            hdl_code = hdl_code + indent(1) + (");\r\n")
+            hdl_code = hdl_code + indent(1) + (");\n")
         else:
-            hdl_code = hdl_code + indent(1) + ("--port (\r\n")
-            hdl_code = hdl_code + indent(2) + ("--port_declaration_tag\r\n")
-            hdl_code = hdl_code + indent(1) + ("--);\r\n")
-        hdl_code = hdl_code + indent(0) + ("end %s;\r\n" % self.name)
-        hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + indent(1) + ("--port (\n")
+            hdl_code = hdl_code + indent(2) + ("--port_declaration_tag\n")
+            hdl_code = hdl_code + indent(1) + ("--);\n")
+        hdl_code = hdl_code + indent(0) + ("end %s;\n" % self.name)
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 # ------------------- Architecture -----------------------
@@ -773,48 +773,48 @@ class Architecture:
 
     def code(self, indent_level=0):
         hdl_code = ""
-        hdl_code = indent(0) + ("architecture %s of %s is\r\n" % (self.name, self.entityName))
-        hdl_code = hdl_code + "\r\n"
-        hdl_code = hdl_code + indent(1) + ("--architecture_declaration_tag\r\n")
-        hdl_code = hdl_code + "\r\n"
+        hdl_code = indent(0) + ("architecture %s of %s is\n" % (self.name, self.entityName))
+        hdl_code = hdl_code + "\n"
+        hdl_code = hdl_code + indent(1) + ("--architecture_declaration_tag\n")
+        hdl_code = hdl_code + "\n"
         if (self.declarationHeader):
             hdl_code = hdl_code + self.declarationHeader.code(1)
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         if (self.constant):
             hdl_code = hdl_code + self.constant.code()
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         if (self.customTypes):
             hdl_code = hdl_code + self.customTypes.code()
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         if (self.customTypesConstants):
             hdl_code = hdl_code + self.customTypesConstants.code()
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         if (self.component):
             hdl_code = hdl_code + self.component.code()
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         if (self.signal):
             hdl_code = hdl_code + self.signal.code()
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         if (self.declarationFooter):
             hdl_code = hdl_code + self.declarationFooter.code(1)
-            hdl_code = hdl_code + "\r\n"
-        hdl_code = hdl_code + indent(0) + ("begin\r\n")
-        hdl_code = hdl_code + "\r\n"
-        hdl_code = hdl_code + indent(1) + ("--architecture_body_tag.\r\n")
-        hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
+        hdl_code = hdl_code + indent(0) + ("begin\n")
+        hdl_code = hdl_code + "\n"
+        hdl_code = hdl_code + indent(1) + ("--architecture_body_tag.\n")
+        hdl_code = hdl_code + "\n"
         if (self.bodyCodeHeader):
             hdl_code = hdl_code + self.bodyCodeHeader.code(1)
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         # blocks will come here.
         # process will come here.
         if (self.instances):
             hdl_code = hdl_code + self.instances.code()
-            hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
         if (self.bodyCodeFooter):
             hdl_code = hdl_code + self.bodyCodeFooter.code(1)
-            hdl_code = hdl_code + "\r\n"
-        hdl_code = hdl_code + indent(0) + ("end %s;\r\n" % self.name)
-        hdl_code = hdl_code + "\r\n"
+            hdl_code = hdl_code + "\n"
+        hdl_code = hdl_code + indent(0) + ("end %s;\n" % self.name)
+        hdl_code = hdl_code + "\n"
         return hdl_code
 
 
