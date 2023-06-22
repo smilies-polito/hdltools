@@ -127,12 +127,13 @@ class PackageObj:
     def __init__(self, name, *args):
         self.source = "File Location Unknown."
         self.name = name
+
         if args:
             self.operator = args[0]
         else:
             self.operator = "all"
 
-    def code(self, libname="work"):
+    def code(self, libname = "work"):
         hdl_code = ""
         indent_tmp = 1
         if (libname == "work"):
