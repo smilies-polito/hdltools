@@ -720,6 +720,72 @@ class InstanceList(dict):
         return DictCode(self)
 
 
+# ------------------- Process -----------------------
+
+class Condition:
+	
+	def __init__(self, condition, _type_ = None):
+		self.condition = condition
+		self._type_ = _type_
+
+	def code(self):
+
+		if self._type_ == None:
+			hdl_code = self.condition
+
+		elif self._type_ == "and":
+			hdl_code = "and " + self.condition
+
+		elif self._type_ == "or":
+			hdl_code = "or " + self.condition
+
+		else:
+			print("Types of if condition not supported. Supported "
+					"types are \"and\" and \"or\"\n")
+			exit(-1)
+
+
+		return hdl_code
+
+class ConditionsList(list):
+	def add(self, condition, _type_ = None):
+		self.append(Condition(condition, _type_))
+
+	def code(self):
+
+		hdl_code = ""
+
+		for condition in self:
+			hdl_code = hdl_code + " " + condition.code()
+
+		return hdl_code
+
+
+class If_block:
+	def __init__(self):
+		self.conditions = ConditionsList()
+		self.body = GenericCodeBlock()
+
+
+	def code(self, indent_level = 0):
+
+		hdl_code = ""
+
+		hdl_code = hdl_code + indent(indent_level) + "if(" + self.conditions.code() + ")\n"
+		hdl_code = hdl_code + indent(indent_level) + "then\n\n"
+		hdl_code = hdl_code + indent(indent_level) + indent(1) + self.body.code()
+
+		return hdl_code
+
+i = If_block()
+
+i.conditions.add("clk'event")
+i.conditions.add("clk = 1", "and")
+
+i.body.add("a <= 2;\n")
+
+print(i.code(indent_level = 2))
+
 # ------------------- Entity -----------------------
 
 
