@@ -216,7 +216,6 @@ class GenericList(dict):
     def code(self, indent_level=0):
         return VHDLenum(self,indent_level)
 
-
 # ------------------- Port -----------------------
 
 
@@ -720,7 +719,7 @@ class InstanceList(dict):
         return DictCode(self)
 
 
-# ------------------- Process -----------------------
+# ------------------- If statement -----------------------
 
 class Condition:
 	
@@ -774,17 +773,178 @@ class If_block:
 		hdl_code = hdl_code + indent(indent_level) + "if(" + self.conditions.code() + ")\n"
 		hdl_code = hdl_code + indent(indent_level) + "then\n\n"
 		hdl_code = hdl_code + indent(indent_level) + indent(1) + self.body.code()
+		hdl_code = hdl_code + "\n"
 
 		return hdl_code
 
-i = If_block()
 
-i.conditions.add("clk'event")
-i.conditions.add("clk = 1", "and")
+class Elsif_block:
+	def __init__(self):
+		self.conditions = ConditionsList()
+		self.body = GenericCodeBlock()
 
-i.body.add("a <= 2;\n")
 
-print(i.code(indent_level = 2))
+	def code(self, indent_level = 0):
+
+		hdl_code = ""
+
+		hdl_code = hdl_code + indent(indent_level) + "elsif(" + self.conditions.code() + ")\n"
+		hdl_code = hdl_code + indent(indent_level) + "then\n\n"
+		hdl_code = hdl_code + indent(indent_level) + indent(1) + self.body.code()
+		hdl_code = hdl_code + "\n"
+
+		return hdl_code
+
+
+class Else_block:
+	def __init__(self):
+		self.body = GenericCodeBlock()
+
+
+	def code(self, indent_level = 0):
+
+		hdl_code = ""
+
+		hdl_code = hdl_code + indent(indent_level) + "else\n"
+		hdl_code = hdl_code + indent(indent_level) + indent(1) + self.body.code()
+		hdl_code = hdl_code + "\n"
+
+		return hdl_code
+
+class Else_list(dict):
+	def __init__(self):
+		self.index = 0
+
+	def add(self):
+		self[self.index] = Else_block()
+		self.index = self.index + 1
+
+	def code(self, indent_level = 0):
+		return DictCode(self, indent_level)
+
+a = Else_list()
+a.add()
+a[0].body.add("a <= '1';\n")
+
+print(a.code())
+
+class If(GenericCodeBlock):
+
+	def code(self, indent_level = 0):
+
+		hdl_code = ""
+
+		hdl_code = hdl_code + indent(indent_level) + self._if_.code()
+		hdl_code = hdl_code + indent(indent_level) + self._elsif_.code()
+		hdl_code = hdl_code + indent(indent_level) + self._else_.code()
+
+		hdl_code = hdl_code + "end if;\n"
+
+		return hdl_code
+
+# ------------------- For loop -----------------------
+
+class For:
+	def __init__(self, name = "", start = 0, stop = 1, iter_name = "i",
+			direction = "up"):
+		self.name = name
+		self.start = start
+		self.stop = stop
+		self.iter_name = iter_name
+		self.direction = direction
+		self.body = GenericCodeBlock()
+
+	def code(self, indent_level = 0):
+
+		hdl_code = ""
+
+
+		if(self.name == ""):
+			hdl_code = hdl_code + indent(indent_level) + "for(" + \
+					self.iter_name + " in "
+
+		else:
+			hdl_code = hdl_code + indent(indent_level) + \
+					self.name + " : for(" + \
+					self.iter_name + " in "
+
+		if(self.direction == "down"):
+			hdl_code = hdl_code + str(self.start) + " downto " + \
+					str(self.stop) + ")\n"
+
+		else:
+			hdl_code = hdl_code + str(self.start) + " to " + \
+					str(self.stop) + ")\n"
+
+		
+
+		hdl_code = hdl_code + indent(indent_level) + "loop\n" 
+
+		hdl_code = hdl_code + indent(indent_level + 1) + \
+				self.body.code() + "\n"
+
+		hdl_code = hdl_code + indent(indent_level) + "end loop " + \
+				self.name + ";\n"
+
+		return hdl_code
+
+# ------------------- Process -----------------------
+class SignalList:
+
+	def __init__(self, signal_list = []):
+		self.signal_dict = {
+			signal : SingleCodeLine(signal, line_end = ", ")
+			for signal in signal_list
+		}
+
+	def add(self, signal):
+		self.signal_dict[signal] = SingleCodeLine(signal, 
+			line_end = ", ")
+
+	def code(self, indent_level = 0):
+		return VHDLenum(self.signal_dict, indent_level)
+
+
+
+class Process:
+
+	def __init__(self, name = "", sensitivity_list = []):
+		self.name = name
+		self.sensitivity_list = SignalList(sensitivity_list)
+		self.body = GenericCodeBlock()
+	
+	def code(self, indent_level = 0):
+
+		hdl_code = ""
+
+		if(self.name == ""):
+			hdl_code = hdl_code + indent(indent_level) + \
+					"process(" + \
+					self.sensitivity_list.code() + \
+					")\n"
+
+		else:
+			hdl_code = hdl_code + indent(indent_level) + \
+					self.name + " : process(" + \
+					self.sensitivity_list.code() + \
+					")\n"
+
+		hdl_code = hdl_code + "begin\n\n"
+
+		hdl_code = hdl_code + self.body.code()
+
+		hdl_code = hdl_code + "\nend process " + self.name + ";\n\n"
+
+		return hdl_code
+
+	
+# p = Process(name = "ciao")
+# p.sensitivity_list.add("clk")
+# p.sensitivity_list.add("start")
+# p.sensitivity_list.add("stop")
+# 
+# print(p.code())
+# 
 
 # ------------------- Entity -----------------------
 
