@@ -11,7 +11,7 @@ class GenericObj:
 	code(indent_level = 0)	: generate the string to declare the generic
 	"""
 
-	def __init__(self, name : str, gen_type : str, value : str):
+	def __init__(self, name : str, gen_type : str, value : str = ""):
 
 		"""
 		Parameters:
@@ -26,7 +26,7 @@ class GenericObj:
 
 		self.name = name
 		self.value = value
-		self.type = gen_type
+		self.gen_type = gen_type
 
 	def code(self, indent_level : int = 0):
 
@@ -42,12 +42,14 @@ class GenericObj:
 		if self.value:
 
 			# Assign a default value to the generic
-			hdl_code = indent(indent_level) + ("%s : %s := %s;\n" % (self.name, self.type, self.value))
+			hdl_code = indent(indent_level) + ("%s : %s := %s;\n" %
+					(self.name, self.gen_type, self.value))
 
 		else:
 
 			# No default value
-			hdl_code = indent(indent_level) + ("%s : %s;\n" % (self.name, self.type))
+			hdl_code = indent(indent_level) + ("%s : %s;\n" %
+					(self.name, self.gen_type))
 
 		return hdl_code
 
@@ -64,7 +66,7 @@ class GenericList(dict):
 					generics
 	"""
 
-	def add(self, name : str, gen_type : str, value : str):
+	def add(self, name : str, gen_type : str, value : str = ""):
 
 		"""
 		Add a generic object to the dictionary.
@@ -79,10 +81,10 @@ class GenericList(dict):
 			Default value of the generic variable
 		"""
 
-		self[name] = GenericObj(name, type, value)
+		self[name] = GenericObj(name, gen_type, value)
 
 
-	def code(self, indent_level=0):
+	def code(self, indent_level : int = 0) -> str:
 
 		"""
 		Generate the string to declare all the generics
@@ -93,4 +95,4 @@ class GenericList(dict):
 			Level of indentation to insert before the string
 		"""
 
-		return VHDLenum(self,indent_level)
+		return VHDLenum(self, indent_level)

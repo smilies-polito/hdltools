@@ -1,6 +1,6 @@
 from format_text import indent
 
-def VHDLenum_dict(objects_dict : dict, indent_level : int = 0) -> str:
+def VHDLenum(objects_dict : dict, indent_level : int = 0) -> str:
 
 	"""
 	Generate a string concatenating all the elements of a dictionary of
