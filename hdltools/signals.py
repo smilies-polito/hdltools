@@ -63,7 +63,8 @@ class SignalList(dict):
 
 	Methods:
 	--------
-	add(name, signal_type, *args)	: add a constant object to the dictionary
+	add(name, signal_type, *args)	: add a signal object to the 
+					dictionary
 	code(indent_level = 0)		: generate the string to declare all the
 					signals
 	"""
