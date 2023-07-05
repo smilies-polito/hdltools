@@ -26,40 +26,6 @@ import copy
 # Block
 # Protected Types
 
-# ------------------- Port -----------------------
-
-
-class PortObj:
-    def __init__(self, name, direction, type, value):
-        self.name = name
-        self.direction = direction
-        self.type = type
-        self.value = value
-        self.assign_value = ""
-
-    def code(self, indent_level=0):
-        if ((self.value is None) or self.direction == "out"):
-            hdl_code = indent(indent_level) + ("%s : %s %s;\n" % (self.name, self.direction, self.type))
-        elif (self.direction == "in" or self.direction == "inout"):
-            hdl_code = indent(indent_level) + ("%s : %s %s := %s;\n" %
-                                              (self.name, self.direction, self.type, self.value))
-        return hdl_code
-
-
-class PortList(dict):
-    def add(self, name, direction, type, value=None):
-        self[name] = PortObj(name, direction, type, value)
-
-    def append(self, port_obj):
-        if isinstance(port_obj, PortObj):
-            self[port_obj.name] = port_obj
-        else:
-            pass
-            #print("Appended element must be of class PortObj")
-
-    def code(self, indent_level=0):
-        return VHDLenum(self,indent_level)
-
 # ------------------- Custom Types -----------------------
 
 
