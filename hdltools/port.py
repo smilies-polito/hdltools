@@ -19,7 +19,7 @@ class PortObj:
 		Parameters:
 		-----------
 		name		: str
-			Name of the generic variable
+			Name of the port
 		direction	: str
 			Direction of the port (in, out, inout, etc.)
 		port_type	: str
@@ -79,7 +79,7 @@ class PortList(dict):
 		Parameters:
 		-----------
 		name		: str
-			Name of the generic variable
+			Name of the port
 		direction	: str
 			Direction of the port (in, out, inout, etc.)
 		port_type	: str
