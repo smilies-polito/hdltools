@@ -85,11 +85,3 @@ class ConstantList(dict):
 		"""
 
 		return DictCode(self)
-
-
-a = ConstantList()
-
-a.add("N", "integer", "10")
-a.add("M", "std_logic", "'0'")
-
-print(a.code())
