@@ -297,51 +297,6 @@ class SubProgramList(dict):
             hdl_code = hdl_code + self[j].code()
         return hdl_code
 
-# ------------------- Component -----------------------
-
-
-class ComponentObj:
-    def __init__(self, name):
-        self.name = name
-        self.generic = GenericList()
-        self.port = PortList()
-        self.filename = ""
-
-    def code(self, indent_level=0):
-        hdl_code = ""
-        hdl_code = hdl_code + indent(1) + ("component %s is\n" % self.name)
-        if (self.generic):
-            hdl_code = hdl_code + indent(2) + ("generic (\n")
-            hdl_code = hdl_code + self.generic.code(3)
-            hdl_code = hdl_code + indent(2) + (");\n")
-        else:
-            hdl_code = hdl_code + indent(2) + ("--generic (\n")
-            hdl_code = hdl_code + indent(3) + ("--generic_declaration_tag\n")
-            hdl_code = hdl_code + indent(2) + ("--);\n")
-        if (self.port):
-            hdl_code = hdl_code + indent(2) + ("port (\n")
-            hdl_code = hdl_code + self.port.code(3)
-            hdl_code = hdl_code + indent(2) + (");\n")
-        else:
-            hdl_code = hdl_code + indent(2) + ("--port (\n")
-            hdl_code = hdl_code + indent(3) + ("--port_declaration_tag\n")
-            hdl_code = hdl_code + indent(2) + ("--);\n")
-        hdl_code = hdl_code + indent(1) + ("end component;\n")
-        hdl_code = hdl_code + "\n"
-        return hdl_code
-
-
-class ComponentList(dict):
-    def add(self, name):
-        self[name] = ComponentObj(name)
-
-    def append(self, component_obj):
-        if isinstance(component_obj, ComponentObj):
-            self[component_obj.name] = component_obj
-
-    def code(self, indent_level=0):
-        return DictCode(self)
-
 # ------------------- Instance -----------------------
 class InstanceObj:
     class _GenericObj(GenericObj):
