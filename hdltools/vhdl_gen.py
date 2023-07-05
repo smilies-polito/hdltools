@@ -297,51 +297,6 @@ class SubProgramList(dict):
             hdl_code = hdl_code + self[j].code()
         return hdl_code
 
-# ------------------- For loop -----------------------
-
-class For:
-	def __init__(self, name = "", start = 0, stop = 1, iter_name = "i",
-			direction = "up"):
-		self.name = name
-		self.start = start
-		self.stop = stop
-		self.iter_name = iter_name
-		self.direction = direction
-		self.body = GenericCodeBlock()
-
-	def code(self, indent_level = 0):
-
-		hdl_code = ""
-
-
-		if(self.name == ""):
-			hdl_code = hdl_code + indent(indent_level) + "for(" + \
-					self.iter_name + " in "
-
-		else:
-			hdl_code = hdl_code + indent(indent_level) + \
-					self.name + " : for(" + \
-					self.iter_name + " in "
-
-		if(self.direction == "down"):
-			hdl_code = hdl_code + str(self.start) + " downto " + \
-					str(self.stop) + ")\n"
-
-		else:
-			hdl_code = hdl_code + str(self.start) + " to " + \
-					str(self.stop) + ")\n"
-
-		
-
-		hdl_code = hdl_code + indent(indent_level) + "loop\n" 
-
-		hdl_code = hdl_code + indent(indent_level + 1) + \
-				self.body.code() + "\n"
-
-		hdl_code = hdl_code + indent(indent_level) + "end loop " + \
-				self.name + ";\n"
-
-		return hdl_code
 
 # ------------------- Process -----------------------
 class SignalList:
