@@ -1,5 +1,5 @@
 from format_text import indent
-from vhdl_text import GenericCodeBlock
+from text import GenericCodeBlock
 from dict_code import DictCode
 
 class Condition:
