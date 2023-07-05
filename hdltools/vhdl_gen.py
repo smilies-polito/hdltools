@@ -199,32 +199,6 @@ class CustomTypeConstantList(dict):
         return DictCode(self)
 
 
-# ------------------- Variables -----------------------
-
-
-class VariableObj:
-    def __init__(self, name, type, *args):
-        self.name = name
-        self.type = type
-        if args:
-            self.init = args[0]
-        else:
-            self.init = "undefined"
-
-    def code(self, indent_level=0):
-        if self.init != "undefined":
-            return indent(1) + ("variable %s : %s := %s;\n" % (self.name, self.type, self.init))
-        else:
-            return indent(1) + ("variable %s : %s;\n" % (self.name, self.type))
-
-
-class VariableList(dict):
-    def add(self, name, type, *args):
-        self[name] = VariableObj(name, type, *args)
-
-    def code(self, indent_level=0):
-        return DictCode(self)
-
 
 # ------------------- Functions & Procedures -----------------------
 
