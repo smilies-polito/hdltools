@@ -199,33 +199,6 @@ class CustomTypeConstantList(dict):
         return DictCode(self)
 
 
-# ------------------- Signals -----------------------
-
-
-class SignalObj:
-    def __init__(self, name, type, *args):
-        self.name = name
-        self.type = type
-        if args:
-            self.value = args[0]
-        else:
-            self.value = ""
-
-    def code(self, indent_level=0):
-        if self.value:
-            return indent(indent_level + 1) + ("signal %s : %s := %s;\n" % (self.name, self.type, self.value))
-        else:
-            return indent(indent_level + 1) + ("signal %s : %s;\n" % (self.name, self.type))
-
-
-class SignalList(dict):
-    def add(self, name, type, *args):
-        self[name] = SignalObj(name, type, *args)
-
-    def code(self, indent_level=0):
-        return DictCode(self)
-
-
 # ------------------- Variables -----------------------
 
 
