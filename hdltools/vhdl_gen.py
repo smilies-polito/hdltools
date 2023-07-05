@@ -158,27 +158,6 @@ class CustomTypeList(dict):
         return DictCode(self)
 
 
-# ------------------- Constant -----------------------
-
-
-class ConstantObj:
-    def __init__(self, name, type, value):
-        self.name = name
-        self.type = type
-        self.value = value
-
-    def code(self, indent_level=0):
-        return indent(indent_level + 1) + "constant %s : %s := %s;\n" % (self.name, self.type, self.value)
-
-
-class ConstantList(dict):
-    def add(self, name, type, value):
-        self[name] = ConstantObj(name, type, value)
-
-    def code(self, indent_level=0):
-        return DictCode(self)
-
-
 # ------------------- Custom Type Constant List -----------------------
 
 
