@@ -26,101 +26,6 @@ import copy
 # Block
 # Protected Types
 
-
-# ------------------- Library -----------------------
-class PackageObj:
-    def __init__(self, name, *args):
-        self.source = "File Location Unknown."
-        self.name = name
-
-        if args:
-            self.operator = args[0]
-        else:
-            self.operator = "all"
-
-    def code(self, libname = "work"):
-        hdl_code = ""
-        indent_tmp = 1
-        if (libname == "work"):
-            indent_tmp = 0
-        hdl_code = hdl_code + indent(indent_tmp) + ("use %s.%s.%s;\n" % (libname, self.name, self.operator))
-        if (libname == "work"):
-            hdl_code = hdl_code + "\n"
-        return hdl_code
-
-
-class PackageList(dict):
-    def add(self, name, *args):
-        self[name] = PackageObj(name)
-        if args:
-            self[name].operator = args[0]
-
-    def code(self, libname="work"):
-        hdl_code = ""
-        for eachPkg in self:
-            hdl_code = hdl_code + self[eachPkg].code(libname)
-        return hdl_code
-
-
-class ContextObj:
-    def __init__(self, name):
-        self.source = "File Location Unknown."
-        self.name = name
-
-
-class ContextList(dict):
-    def add(self, name):
-        self[name] = ContextObj(name)
-
-
-class LibraryObj:
-    def __init__(self, name, *args):
-        self.name = name
-        self.package = PackageList()
-        self.context = ContextList()
-
-    def code(self, indent_level=0):
-        hdl_code = ""
-        hdl_code = hdl_code + indent(indent_level + 0) + ("library %s;\n" % self.name)
-        for j in self.context:
-            hdl_code = hdl_code + indent(indent_level + 1) + ("context %s.%s;\n" % (self.name, self.context[j].name))
-        hdl_code = hdl_code + self.package.code(self.name)
-        return hdl_code
-
-
-class LibraryList(dict):
-    def add(self, name):
-        self[name] = LibraryObj(name)
-
-    def code(self, indent_level=0):
-        return DictCode(self) + "\n"
-
-
-# ------------------- Generic -----------------------
-
-
-class GenericObj:
-    def __init__(self, name, type, value):
-        self.name = name
-        self.value = value
-        self.type = type
-        self.assign_value = value
-
-    def code(self, indent_level=0):
-        if self.value:
-            hdl_code = indent(indent_level) + ("%s : %s := %s;\n" % (self.name, self.type, self.value))
-        else:
-            hdl_code = indent(indent_level) + ("%s : %s;\n" % (self.name, self.type))
-        return hdl_code
-
-
-class GenericList(dict):
-    def add(self, name, type, value):
-        self[name] = GenericObj(name, type, value)
-
-    def code(self, indent_level=0):
-        return VHDLenum(self,indent_level)
-
 # ------------------- Port -----------------------
 
 
@@ -842,15 +747,6 @@ class Process:
 
 		return hdl_code
 
-	
-# p = Process(name = "ciao")
-# p.sensitivity_list.add("clk")
-# p.sensitivity_list.add("start")
-# p.sensitivity_list.add("stop")
-# 
-# print(p.code())
-# 
-
 # ------------------- Entity -----------------------
 
 
@@ -1001,5 +897,3 @@ class BasicVHDL:
         hdl_code = hdl_code + self.entity.code()
         hdl_code = hdl_code + self.architecture.code()
         return hdl_code
-
-
