@@ -1,3 +1,11 @@
+from constant import ConstantList
+from component import ComponentList
+from text import GenericCodeBlock
+from process import ProcessList
+from instance import InstanceList
+from signals import SignalList
+from format_text import indent
+
 class Architecture:
 
 	def __init__(self, name, entity_name):
@@ -6,15 +14,11 @@ class Architecture:
 		self.signal = SignalList()
 		self.constant = ConstantList()
 		self.component = ComponentList()
-		self.subPrograms = SubProgramList()
-		self.customTypes = CustomTypeList()
-		self.customTypesConstants = CustomTypeConstantList()
 		self.declarationHeader = GenericCodeBlock()
 		self.declarationFooter = GenericCodeBlock()
 		self.bodyCodeHeader = GenericCodeBlock()
+		self.processes = ProcessList()
 		self.instances = InstanceList()
-		self.blocks = ""
-		self.process = ""
 		self.bodyCodeFooter = GenericCodeBlock()
 
 	def code(self, indent_level=0):
@@ -31,14 +35,6 @@ class Architecture:
 
 		if (self.constant):
 			hdl_code = hdl_code + self.constant.code()
-			hdl_code = hdl_code + "\n"
-
-		if (self.customTypes):
-			hdl_code = hdl_code + self.customTypes.code()
-			hdl_code = hdl_code + "\n"
-			
-		if (self.customTypesConstants):
-			hdl_code = hdl_code + self.customTypesConstants.code()
 			hdl_code = hdl_code + "\n"
 
 		if (self.component):
@@ -61,6 +57,10 @@ class Architecture:
 			hdl_code = hdl_code + self.bodyCodeHeader.code(1)
 			hdl_code = hdl_code + "\n"
 			
+		if self.processes:
+			hdl_code = hdl_code + self.processes.code()
+			hdl_code = hdl_code + "\n"
+
 		if (self.instances):
 			hdl_code = hdl_code + self.instances.code()
 			hdl_code = hdl_code + "\n"
