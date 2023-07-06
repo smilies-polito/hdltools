@@ -25,13 +25,13 @@ class VHDLblock:
 	def declaration(self):
 		return self.dec_object()
 
-	def write_file(self):
+	def write_file(self, output_dir = "output"):
 		hdl_code = self.code()
 
-		if (not os.path.exists("output")):
-			os.makedirs("output")
+		if (not os.path.exists(output_dir)):
+			os.makedirs(output_dir)
 
-		output_file_name = "output/"+self.entity.name+".vhd"
+		output_file_name = output_dir + "/" + self.entity.name+".vhd"
 
 		with open(output_file_name, "w+") as fp:
 
@@ -49,6 +49,3 @@ class VHDLblock:
 		hdl_code = hdl_code + self.architecture.code()
 
 		return hdl_code
-
-a = VHDLblock("adder", "behavior")
-a.write_file()
