@@ -64,7 +64,6 @@ def DictCode(objects_dict : dict, indent_level : int = 0) -> str:
 	hdl_code = ""
 
 	for key in objects_dict:
-		hdl_code = hdl_code + indent(indent_level) + \
-				objects_dict[key].code()
+		hdl_code = hdl_code + objects_dict[key].code(indent_level)
 	
 	return hdl_code
