@@ -1,6 +1,6 @@
 from format_text import indent
 from text import GenericCodeBlock
-from dict_code import DictCode
+from dict_code import DictCode, VHDLenum
 
 class Condition:
 
@@ -36,15 +36,16 @@ class Condition:
 
 		# Normal condition
 		if not(self.cond_type):
-			hdl_code = self.condition
+			hdl_code = self.condition + " "
 
 		# And condition, to combine at least with a normal one
-		elif self._type_ == "and":
-			hdl_code = "and " + self.condition
+		elif self.cond_type == "and":
+			hdl_code = "and " + self.condition + " "
 
 		# Or condition, to combine at least with a normal one
-		elif self._type_ == "or":
-			hdl_code = "or " + self.condition
+		elif self.cond_type == "or":
+			hdl_code = "or " + self.condition + " "
+
 
 		else:
 			print("Types of if condition not supported. Supported "
@@ -85,6 +86,7 @@ class ConditionsList(dict):
 		"""
 
 		self[self.index] = Condition(condition, cond_type)
+		self.index = self.index + 1
 
 
 	def code(self) -> str:
@@ -93,13 +95,7 @@ class ConditionsList(dict):
 		Generate the condition string.
 		"""
 
-		hdl_code = ""
-
-		for condition in self:
-			hdl_code = hdl_code + " " + condition.code()
-
-		return hdl_code
-
+		return VHDLenum(self)
 
 
 class If_block:
@@ -137,9 +133,8 @@ class If_block:
 			hdl_code = hdl_code + indent(indent_level) + "if(" + \
 					self.conditions.code() + ")\n"
 			hdl_code = hdl_code + indent(indent_level) + "then\n\n"
-			hdl_code = hdl_code + indent(indent_level) + indent(1) + \
-					self.body.code()
-			hdl_code = hdl_code + "\n"
+			hdl_code = hdl_code + indent(indent_level + 1) + \
+					self.body.code() + "\n"
 
 		return hdl_code
 
@@ -293,19 +288,31 @@ class If():
 
 		# Generate only if there is an if statement
 		if self._if_.code():
-			hdl_code = hdl_code + indent(indent_level) + \
-					self._if_.code(indent_level)
+			hdl_code = hdl_code + self._if_.code(indent_level)
 
 			# Generate only if there is a list of elsif conditions
 			if self._elsif_.code():
-				hdl_code = hdl_code + indent(indent_level) + \
-						self._elsif_.code(indent_level)
+				hdl_code = hdl_code + \
+					self._elsif_.code(indent_level)
 
-			# Generate onòy if there is an else condition
+			# Generate only if there is an else condition
 			if self._else_.code():
-				hdl_code = hdl_code + indent(indent_level) + \
-						self._else_.code(indent_level)
+				hdl_code = hdl_code + \
+					self._else_.code(indent_level)
 
-			hdl_code = hdl_code + "end if;\n"
+			hdl_code = hdl_code + indent(indent_level) + \
+					"end if;\n\n"
 
 		return hdl_code
+
+class IfList(dict):
+
+	def __init__(self):
+		self.index = 0
+
+	def add(self):
+		self[self.index] = If()
+		self.index = self.index + 1
+
+	def code(self, indent_level = 0):
+		return DictCode(self, indent_level) + "\n"

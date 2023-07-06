@@ -1,5 +1,6 @@
 from format_text import indent
 from text import GenericCodeBlock
+from dict_code import DictCode
 
 class For:
 	
@@ -82,6 +83,20 @@ class For:
 					self.body.code() + "\n"
 
 			hdl_code = hdl_code + indent(indent_level) + \
-					"end loop " + self.name + ";\n"
+					"end loop " + self.name + ";\n\n"
 
 		return hdl_code
+
+
+class ForList(dict):
+
+	def __init__(self):
+		self.index = 0
+
+	def add(self, name : str = "", start : int = 0, stop : int = 1,
+			iter_name : str= "i", direction : str= "up"):
+		self[self.index] = For(name, start, stop, iter_name, direction)
+		self.index = self.index + 1
+
+	def code(self, indent_level = 0):
+		return DictCode(self, indent_level) + "\n"
