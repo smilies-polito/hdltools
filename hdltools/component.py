@@ -15,7 +15,7 @@ class ComponentObj:
 	"""
 
 
-	def __init__(self, name : str):
+	def __init__(self, vhdl_block):
 
 		"""
 		Parameters:
@@ -24,9 +24,9 @@ class ComponentObj:
 			Name of the component
 		"""
 
-		self.name = name
-		self.generic = GenericList()
-		self.port = PortList()
+		self.name = vhdl_block.entity.name
+		self.generic = vhdl_block.entity.generic
+		self.port = vhdl_block.entity.port
 
 
 	def code(self, indent_level : int = 0):
