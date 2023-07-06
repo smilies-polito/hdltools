@@ -41,8 +41,9 @@ class Entity:
 					("--port_declaration_tag\n")
 			hdl_code = hdl_code + indent(indent_level+1) + \
 					("--);\n")
-			hdl_code = hdl_code + indent(indent_level) + \
-					("end %s;\n" % self.name)
-			hdl_code = hdl_code + "\n"
+
+		hdl_code = hdl_code + indent(indent_level) + \
+				("end entity %s;\n" % self.name)
+		hdl_code = hdl_code + "\n"
 
 		return hdl_code
