@@ -122,27 +122,3 @@ class ComponentList(dict):
 		"""
 
 		return DictCode(self, indent_level)
-
-
-a = ComponentList()
-
-a.add("adder")
-
-a["adder"].generic.add("N", "integer", "8")
-
-a["adder"].port.add("in0", "in", "std_logic_vector(N downto 0)")
-a["adder"].port.add("in1", "in", "std_logic_vector(N downto 0)")
-
-a["adder"].port.add("add_out", "out", "std_logic_vector(N downto 0)")
-
-a.add("subtractor")
-
-a["subtractor"].generic.add("N", "integer", "8")
-
-a["subtractor"].port.add("in0", "in", "std_logic_vector(N downto 0)")
-a["subtractor"].port.add("in1", "in", "std_logic_vector(N downto 0)")
-
-a["subtractor"].port.add("add_out", "out", "std_logic_vector(N downto 0)")
-
-
-print(a.code())
