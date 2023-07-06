@@ -39,7 +39,7 @@ class Process:
 
 		hdl_code = ""
 
-		if self.body:
+		if self.body or self.if_list or self.for_list:
 			if(self.name == ""):
 				hdl_code = hdl_code + indent(indent_level) + \
 						"process(" + \
@@ -61,7 +61,7 @@ class Process:
 			hdl_code = hdl_code + self.body.code(indent_level + 1)
 
 			hdl_code = hdl_code + indent(indent_level) + \
-					"\nend process " + self.name + ";\n\n"
+					"end process " + self.name + ";\n\n"
 
 		return hdl_code
 
