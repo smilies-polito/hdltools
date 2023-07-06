@@ -2,7 +2,7 @@
 # The license below may be changed to be compliant to those using these
 # generators. The generator itself is licensed under Apache as stated above.
 
-license_text = """---------------------------------------------------------------------------------
+LicenseText = """---------------------------------------------------------------------------------
 -- This is free and unencumbered software released into the public domain.
 --
 -- Anyone is free to copy, modify, publish, use, compile, sell, or
