@@ -1,26 +1,39 @@
-class SensitivityList:
+from text import SingleCodeLine, GenericCodeBlock
+from dict_code import VHDLenum
+from format_text import indent
+from if_statement import IfList
+from for_statement import ForList
 
-	def __init__(self, signal_list = []):
-		self.signal_dict = {
-			signal : SingleCodeLine(signal, line_end = ", ")
-			for signal in signal_list
-		}
+class SensitivityList(dict):
+
+	def __init__(self, *args):
+
+		self.index = 0
+		
+		for signal in args:
+			self[self.index] = SingleCodeLine(signal, 
+					line_end = ", ")
+			
+			self.index = self.index + 1
 
 	def add(self, signal):
-		self.signal_dict[signal] = SingleCodeLine(signal, 
+		self[self.index] = SingleCodeLine(signal, 
 			line_end = ", ")
 
-	def code(self, indent_level = 0):
-		return VHDLenum(self.signal_dict, indent_level)
+		self.index = self.index + 1
 
+	def code(self, indent_level = 0):
+		return VHDLenum(self, indent_level)
 
 
 class Process:
 
-	def __init__(self, name = "", sensitivity_list = []):
+	def __init__(self, name = "", *args):
 		self.name = name
-		self.sensitivity_list = SignalList(sensitivity_list)
+		self.sensitivity_list = SensitivityList(*args)
 		self.body = GenericCodeBlock()
+		self.if_list = IfList()
+		self.for_list = ForList()
 	
 	def code(self, indent_level = 0):
 
@@ -38,10 +51,13 @@ class Process:
 					self.sensitivity_list.code() + \
 					")\n"
 
-		hdl_code = hdl_code + "begin\n\n"
+		hdl_code = hdl_code + indent(indent_level) + "begin\n\n"
 
-		hdl_code = hdl_code + self.body.code()
+		hdl_code = hdl_code + self.for_list.code(indent_level + 1)
+		hdl_code = hdl_code + self.if_list.code(indent_level + 1)
+		hdl_code = hdl_code + self.body.code(indent_level + 1)
 
-		hdl_code = hdl_code + "\nend process " + self.name + ";\n\n"
+		hdl_code = hdl_code + indent(indent_level) + \
+				"\nend process " + self.name + ";\n\n"
 
 		return hdl_code
