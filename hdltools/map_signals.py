@@ -1,7 +1,7 @@
 from format_text import indent
 from dict_code import VHDLenum
 
-class GenericMapObj:
+class MapObj:
 
 	def __init__(self, port, signal):
 		self.port = port
@@ -10,19 +10,19 @@ class GenericMapObj:
 	def code(self, indent_level = 0):
 		return self.port + " => " + self.signal + ",\n"
 
-class GenericMapList(dict):
+class MapList(dict):
 
-	def __init__(self, generic_list, mode = "auto", *args, **kwargs):
+	def __init__(self, elements_list, mode = "auto", *args, **kwargs):
 
 		if mode == "auto":
 		
 			index = 0
 
-			for key in generic_list:
+			for key in elements_list:
 
-				name = generic_list[key].name
+				name = elements_list[key].name
 
-				self[index] = GenericMapObj(name, name)
+				self[index] = MapObj(name, name)
 				index = index + 1
 			
 
