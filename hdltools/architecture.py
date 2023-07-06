@@ -26,7 +26,6 @@ class Architecture:
 		hdl_code = ""
 		hdl_code = indent(0) + ("architecture %s of %s is\n" % (self.name, self.entityName))
 		hdl_code = hdl_code + "\n"
-		hdl_code = hdl_code + indent(1) + ("--architecture_declaration_tag\n")
 		hdl_code = hdl_code + "\n"
 
 		if (self.declarationHeader):
@@ -45,12 +44,13 @@ class Architecture:
 			hdl_code = hdl_code + self.signal.code()
 			hdl_code = hdl_code + "\n"
 
+
+		hdl_code = hdl_code + indent(0) + ("begin\n\n")
+
 		if (self.declarationFooter):
 			hdl_code = hdl_code + self.declarationFooter.code(1)
 			hdl_code = hdl_code + "\n"
-			hdl_code = hdl_code + indent(0) + ("begin\n")
 			hdl_code = hdl_code + "\n"
-			hdl_code = hdl_code + indent(1) + ("--architecture_body_tag.\n")
 			hdl_code = hdl_code + "\n"
 
 		if (self.bodyCodeHeader):
@@ -58,7 +58,8 @@ class Architecture:
 			hdl_code = hdl_code + "\n"
 			
 		if self.processes:
-			hdl_code = hdl_code + self.processes.code()
+			hdl_code = hdl_code + self.processes.code(indent_level +
+					1)
 			hdl_code = hdl_code + "\n"
 
 		if (self.instances):
@@ -68,7 +69,8 @@ class Architecture:
 		if (self.bodyCodeFooter):
 			hdl_code = hdl_code + self.bodyCodeFooter.code(1)
 			hdl_code = hdl_code + "\n"
-			hdl_code = hdl_code + indent(0) + ("end %s;\n" % self.name)
-			hdl_code = hdl_code + "\n"
+
+		hdl_code = hdl_code + indent(0) + ("end architecture %s;\n" % self.name)
+		hdl_code = hdl_code + "\n"
 
 		return hdl_code
