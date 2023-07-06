@@ -39,7 +39,7 @@ class SingleCodeLine:
 			How many indent level to put before the string
 		"""
 
-		return indent(indent_level) + self.value+self.line_end
+		return indent(indent_level) + self.value + self.line_end
 
 
 
@@ -78,7 +78,7 @@ class GenericCodeBlock(dict):
 
 		"""
 
-		self[self.index] = SingleCodeLine(text,line_end)
+		self[self.index] = SingleCodeLine(text, line_end)
 		self.index = self.index + 1
 
 	def code(self, indent_level : int = 0) -> str:
@@ -92,4 +92,4 @@ class GenericCodeBlock(dict):
 			How many indent level to put before the string
 		"""
 
-		return DictCode(self,indent_level) + "\n"
+		return DictCode(self, indent_level) + "\n"
