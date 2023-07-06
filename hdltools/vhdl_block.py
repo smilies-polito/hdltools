@@ -8,7 +8,7 @@ from license_text import LicenseText
 import os
 
 class VHDLblock:
-	def __init__(self, entity_name, architecture_name):
+	def __init__(self, entity_name, architecture_name = "behavior"):
 		self.fileHeader = GenericCodeBlock()
 		self.fileHeader.add(LicenseText)
 		self.library = LibraryList()
@@ -46,6 +46,7 @@ class VHDLblock:
 		hdl_code = hdl_code + self.library.code()
 		hdl_code = hdl_code + self.work.code()
 		hdl_code = hdl_code + self.entity.code()
+		hdl_code = hdl_code + self.architecture.code()
 
 		return hdl_code
 
