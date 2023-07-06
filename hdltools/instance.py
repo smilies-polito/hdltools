@@ -1,48 +1,47 @@
-class InstanceObj:
-    class _GenericObj(GenericObj):
-        def assign(self,assign_value):
-            self.assign_value = assign_value
+from dict_code import VHDLenum
+from text import SingleCodeLine
 
-    class _PortObj(PortObj):
-        def assign(self,assign_value):
-            self.assign_value = assign_value
+class Instance():
 
-    class _PortList(PortList):
-        def add(self, name, direction, type, value=None):
-            self[name] = InstanceObj._PortObj(name, direction, type, value)
-        def _listcopy(self, port):
-            for port_name in port:
-                _element = port[port_name]
-                self.add(_element.name, _element.direction, _element.type, _element.value)
+	def __init__(self, component):
+		self.name = component.name
+		self.generic = component.generic
+		self.port = component.port
+		self.g_map = {}
+		self.p_map = {}
 
-    class _GenericList(GenericList):
-        def add(self, name, type, value):
-            self[name] = InstanceObj._GenericObj(name, type, value)
-        def _listcopy(self, generic):
-            for generic_name in generic:
-                _element = generic[generic_name]
-                self.add(_element.name, _element.type, _element.value)
+	
+	def generic_map(self, mode = "auto", mappings = None):
 
-    def __init__(self, inst_name, comp_name):
-        self.instance_name = inst_name
-        self.component_name = comp_name
-        self.port = self._PortList()
-        self.generic = self._GenericList()
+		if mode == "auto":
 
-        if isinstance(comp_name, BasicVHDL):
-            self.component_name = comp_name.entity.name
-            self.generic._listcopy(comp_name.entity.generic)
-            self.port._listcopy(comp_name.entity.port)
+			index = 0
+			
+			for key in self.generic:
 
-        elif isinstance(comp_name, Entity):
-            self.component_name = comp_name.name
-            self.generic._listcopy(comp_name.generic)
-            self.port._listcopy(comp_name.port)
+				self.g_map[index] = SingleCodeLine(self.generic[key].name + \
+					" => " + self.generic[key].name + ",\n")
+				index = index + 1
 
-        elif isinstance(comp_name, ComponentObj):
-            self.component_name = comp_name.name
-            self.generic._listcopy(comp_name.generic)
-            self.port._listcopy(comp_name.port)
+	def code(self, indent_level = 0):
 
-    def code(self, indent_level=2):
-        assign_gen_code = GenericCodeBlock()
+		return VHDLenum(self.g_map, indent_level)
+					
+
+
+
+
+from component import ComponentObj
+
+adder = ComponentObj("adder")
+adder.generic.add("bit_width0", "integer", "8")
+adder.generic.add("bit_width1", "integer", "8")
+adder.generic.add("bit_width2", "integer", "8")
+
+print(adder.code())
+
+
+a = Instance(adder)
+a.generic_map()
+
+print(a.code(1))
