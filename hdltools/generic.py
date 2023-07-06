@@ -25,8 +25,8 @@ class GenericObj:
 		"""
 
 		self.name = name
-		self.value = value
 		self.gen_type = gen_type
+		self.value = value
 
 	def code(self, indent_level : int = 0):
 
