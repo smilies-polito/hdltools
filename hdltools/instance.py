@@ -1,5 +1,5 @@
 from format_text import indent
-from dict_code import VHDLenum
+from dict_code import VHDLenum, DictCode
 from text import SingleCodeLine
 
 from map_signals import MapList
@@ -52,26 +52,11 @@ class Instance():
 
 
 		return hdl_code
-					
 
+class InstanceList(dict):
 
+	def add(self, component, instance_name : str):
+		self[instance_name] = Instance(component, instance_name)
 
-
-from component import ComponentObj
-
-adder = ComponentObj("adder")
-adder.generic.add("bit_width0", "integer", "8")
-adder.generic.add("bit_width1", "integer", "8")
-adder.generic.add("bit_width2", "integer", "8")
-
-adder.port.add("in0", "in", "st_logic")
-adder.port.add("in1", "in", "st_logic")
-
-print(adder.code())
-
-
-a = Instance(adder, "adder_0")
-a.generic_map()
-a.port_map()
-
-print(a.code())
+	def code(self, indent_level : int = 0):
+		return DictCode(self, indent_level)
