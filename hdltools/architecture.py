@@ -64,6 +64,7 @@ class Architecture:
 			hdl_code = hdl_code + "\n"
 			
 		if self.processes:
+
 			hdl_code = hdl_code + self.processes.code(indent_level +
 					1)
 			hdl_code = hdl_code + "\n"

@@ -3,6 +3,7 @@ from dict_code import VHDLenum, DictCode
 from format_text import indent
 from if_statement import IfList
 from for_statement import ForList
+from case_statement import CaseList
 
 class SensitivityList(dict):
 
@@ -34,12 +35,13 @@ class Process:
 		self.body = GenericCodeBlock()
 		self.if_list = IfList()
 		self.for_list = ForList()
+		self.case_list = CaseList()
 	
 	def code(self, indent_level = 0):
 
 		hdl_code = ""
 
-		if self.body or self.if_list or self.for_list:
+		if self.body or self.if_list or self.for_list or self.case_list:
 			if(self.name == ""):
 				hdl_code = hdl_code + indent(indent_level) + \
 						"process(" + \
@@ -54,9 +56,11 @@ class Process:
 
 			hdl_code = hdl_code + indent(indent_level) + "begin\n\n"
 
+			hdl_code = hdl_code + self.if_list.code(indent_level \
+						+ 1)
 			hdl_code = hdl_code + self.for_list.code(indent_level \
 						+ 1)
-			hdl_code = hdl_code + self.if_list.code(indent_level \
+			hdl_code = hdl_code + self.case_list.code(indent_level \
 						+ 1)
 			hdl_code = hdl_code + self.body.code(indent_level + 1)
 
@@ -76,3 +80,5 @@ class ProcessList(dict):
 
 	def code(self, indent_level : int = 0):
 		return DictCode(self, indent_level)
+
+a = ProcessList()
