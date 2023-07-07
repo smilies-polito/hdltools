@@ -21,40 +21,46 @@ class Architecture:
 		self.instances = InstanceList()
 		self.bodyCodeFooter = GenericCodeBlock()
 
-	def code(self, indent_level=0):
+	def code(self, indent_level = 0):
 
 		hdl_code = ""
-		hdl_code = indent(0) + ("architecture %s of %s is\n" % (self.name, self.entityName))
+		hdl_code = indent(indent_level) + ("architecture %s of %s is\n" 
+				% (self.name, self.entityName))
 		hdl_code = hdl_code + "\n"
 		hdl_code = hdl_code + "\n"
 
 		if (self.declarationHeader):
-			hdl_code = hdl_code + self.declarationHeader.code(1)
+			hdl_code = hdl_code + \
+				self.declarationHeader.code(indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
 		if (self.constant):
-			hdl_code = hdl_code + self.constant.code()
+			hdl_code = hdl_code + self.constant.code(indent_level +
+					1)
 			hdl_code = hdl_code + "\n"
 
 		if (self.component):
-			hdl_code = hdl_code + self.component.code()
+			hdl_code = hdl_code + self.component.code(indent_level +
+					1)
 			hdl_code = hdl_code + "\n"
 
 		if (self.signal):
-			hdl_code = hdl_code + self.signal.code()
+			hdl_code = hdl_code + self.signal.code(indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
-
-		hdl_code = hdl_code + indent(0) + ("begin\n\n")
 
 		if (self.declarationFooter):
-			hdl_code = hdl_code + self.declarationFooter.code(1)
+			hdl_code = hdl_code + self.declarationFooter.code(
+					indent_level + 1)
 			hdl_code = hdl_code + "\n"
 			hdl_code = hdl_code + "\n"
 			hdl_code = hdl_code + "\n"
 
+		hdl_code = hdl_code + indent(indent_level) + ("begin\n\n")
+
 		if (self.bodyCodeHeader):
-			hdl_code = hdl_code + self.bodyCodeHeader.code(1)
+			hdl_code = hdl_code + self.bodyCodeHeader.code(
+					indent_level + 1)
 			hdl_code = hdl_code + "\n"
 			
 		if self.processes:
@@ -63,14 +69,17 @@ class Architecture:
 			hdl_code = hdl_code + "\n"
 
 		if (self.instances):
-			hdl_code = hdl_code + self.instances.code()
+			hdl_code = hdl_code + self.instances.code(
+					indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
 		if (self.bodyCodeFooter):
-			hdl_code = hdl_code + self.bodyCodeFooter.code(1)
+			hdl_code = hdl_code + self.bodyCodeFooter.code(
+					indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
-		hdl_code = hdl_code + indent(0) + ("end architecture %s;\n" % self.name)
+		hdl_code = hdl_code + indent(indent_level) + \
+				("end architecture %s;\n" % self.name)
 		hdl_code = hdl_code + "\n"
 
 		return hdl_code
