@@ -1,6 +1,11 @@
 from format_text import indent
 from dict_code import DictCode
 
+from typing import TypeVar, Generic, Union
+
+VhdlClass = TypeVar("Whichever class"
+		"imlementing the code() method")
+
 class SingleCodeLine:
 
 	"""
@@ -63,7 +68,7 @@ class GenericCodeBlock(dict):
 
 		self.index = 0
 
-	def add(self, text : str, line_end : str = "\n"):
+	def add(self, text : Union[str, VhdlClass], line_end : str = "\n"):
 
 		"""
 		Add a single line of text to the block.
@@ -78,7 +83,16 @@ class GenericCodeBlock(dict):
 
 		"""
 
-		self[self.index] = SingleCodeLine(text, line_end)
+		if type(text) == str:
+			self[self.index] = SingleCodeLine(text, line_end)
+
+		elif hasattr(text, "code") and callable(text.code):
+			self[self.index] = text
+
+		else:
+			print("Invalid text argument to GenericCodeBlock\n")
+			exit(-1)
+
 		self.index = self.index + 1
 
 	def code(self, indent_level : int = 0) -> str:
