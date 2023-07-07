@@ -59,7 +59,8 @@ class Case():
 
 			hdl_code = hdl_code + self.others.code(indent_level + 1)
 
-			hdl_code = hdl_code + "end case;\n\n"
+			hdl_code = hdl_code + indent(indent_level) +\
+					"end case;\n\n"
 
 
 		return hdl_code
