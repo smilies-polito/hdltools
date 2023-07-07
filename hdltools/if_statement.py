@@ -133,8 +133,7 @@ class If_block:
 			hdl_code = hdl_code + indent(indent_level) + "if(" + \
 					self.conditions.code() + ")\n"
 			hdl_code = hdl_code + indent(indent_level) + "then\n\n"
-			hdl_code = hdl_code + indent(indent_level + 1) + \
-					self.body.code() + "\n"
+			hdl_code = hdl_code + self.body.code(indent_level + 1) + "\n"
 
 		return hdl_code
 
@@ -173,8 +172,7 @@ class Elsif_block:
 			hdl_code = hdl_code + indent(indent_level) + "elsif(" + \
 					self.conditions.code() + ")\n"
 			hdl_code = hdl_code + indent(indent_level) + "then\n\n"
-			hdl_code = hdl_code + indent(indent_level) + indent(1) + \
-					self.body.code()
+			hdl_code = hdl_code + self.body.code(indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
 		return hdl_code
@@ -249,8 +247,7 @@ class Else_block:
 		# Generate code only if the body contains something
 		if self.body:
 			hdl_code = hdl_code + indent(indent_level) + "else\n"
-			hdl_code = hdl_code + indent(indent_level) + indent(1) + \
-					self.body.code()
+			hdl_code = hdl_code + self.body.code(indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
 		return hdl_code
