@@ -8,9 +8,9 @@ class Instance():
 
 	def __init__(self, component, instance_name):
 		self.instance_name = instance_name
-		self.name = component.name
-		self.generic_list = component.generic
-		self.port_list = component.port
+		self.name = component.entity.name
+		self.generic_list = component.entity.generic
+		self.port_list = component.entity.port
 		self.g_map = {}
 		self.p_map = {}
 
