@@ -69,7 +69,7 @@ class SignalList(dict):
 					signals
 	"""
 
-	def add(self, name, type, *args):
+	def add(self, name, signal_type, *args):
 
 		"""
 		Add a signal object to the dictionary.
@@ -86,7 +86,7 @@ class SignalList(dict):
 
 		"""
 
-		self[name] = SignalObj(name, type, *args)
+		self[name] = SignalObj(name, signal_type, *args)
 
 	def code(self, indent_level : int = 0) -> str:
 
