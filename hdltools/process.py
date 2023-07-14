@@ -71,14 +71,8 @@ class Process:
 
 class ProcessList(dict):
 
-	def __init__(self):
-		self.index = 0
-
 	def add(self, name : str = "", *args):
-		self[self.index] = Process(name, *args)
-		self.index = self.index + 1
+		self[name] = Process(name, *args)
 
 	def code(self, indent_level : int = 0):
 		return DictCode(self, indent_level)
-
-a = ProcessList()
