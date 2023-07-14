@@ -4,6 +4,7 @@ from text import GenericCodeBlock
 from process import ProcessList
 from instance import InstanceList
 from signals import SignalList
+from custom_types import CustomTypeList
 from format_text import indent
 
 class Architecture:
@@ -11,6 +12,7 @@ class Architecture:
 	def __init__(self, name, entity_name):
 		self.name = name
 		self.entityName = entity_name
+		self.customTypes = CustomTypeList()
 		self.signal = SignalList()
 		self.constant = ConstantList()
 		self.component = ComponentList()
@@ -44,6 +46,11 @@ class Architecture:
 					1)
 			hdl_code = hdl_code + "\n"
 
+		if (self.customTypes):
+			hdl_code = hdl_code + self.customTypes.code(
+					indent_level + 1)
+			hdl_code = hdl_code + "\n"
+
 		if (self.signal):
 			hdl_code = hdl_code + self.signal.code(indent_level + 1)
 			hdl_code = hdl_code + "\n"
@@ -57,6 +64,7 @@ class Architecture:
 			hdl_code = hdl_code + "\n"
 
 		hdl_code = hdl_code + indent(indent_level) + ("begin\n\n")
+
 
 		if (self.bodyCodeHeader):
 			hdl_code = hdl_code + self.bodyCodeHeader.code(
