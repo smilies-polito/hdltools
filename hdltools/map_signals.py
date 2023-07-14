@@ -3,12 +3,14 @@ from dict_code import VHDLenum
 
 class MapObj:
 
-	def __init__(self, port, signal):
+	def __init__(self, port, signal, conn_range = ""):
 		self.port = port
 		self.signal = signal
+		self.conn_range = conn_range
 
 	def code(self, indent_level = 0):
-		return self.port + " => " + self.signal + ",\n"
+		return self.port + self.conn_range + " => " + \
+			self.signal + ",\n"
 
 class MapList(dict):
 
@@ -91,7 +93,7 @@ class MapList(dict):
 			exit(-1)
 
 
-	def add(self, target_name, source):
+	def add(self, target_name, source, conn_range = ""):
 
 		present = False
 
@@ -101,11 +103,18 @@ class MapList(dict):
 
 		if present:
 
+			if conn_range and target_name in self:
+				print(self.code())
+				del self[target_name]
+
 			if type(source) == str:
-				self[target_name] = MapObj(target_name, source)
+				self[target_name + conn_range] = \
+					MapObj(target_name, source, conn_range)
 
 			elif hasattr(source, "name"):
-				self[target_name] = MapObj(target_name, source.name)
+				self[target_name + conn_range] = \
+					MapObj(target_name, source.name,
+					conn_range)
 
 			else:
 				print("Error, wrong source in signal mapping\n")
@@ -121,3 +130,4 @@ class MapList(dict):
 
 	def code(self, indent_level = 0):
 		return VHDLenum(self, indent_level)
+
