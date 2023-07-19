@@ -56,14 +56,14 @@ class Process:
 
 			hdl_code = hdl_code + indent(indent_level) + "begin\n\n"
 
+			hdl_code = hdl_code + self.body.code(indent_level + 1)
+
 			hdl_code = hdl_code + self.if_list.code(indent_level \
 						+ 1)
 			hdl_code = hdl_code + self.for_list.code(indent_level \
 						+ 1)
 			hdl_code = hdl_code + self.case_list.code(indent_level \
 						+ 1)
-			hdl_code = hdl_code + self.body.code(indent_level + 1)
-
 			hdl_code = hdl_code + indent(indent_level) + \
 					"end process " + self.name + ";\n\n"
 
