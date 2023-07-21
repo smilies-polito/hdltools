@@ -29,41 +29,64 @@ class SensitivityList(dict):
 
 class Process:
 
-	def __init__(self, name = "", *args):
+	def __init__(self, name = "", final_wait = False, *args):
 		self.name = name
 		self.sensitivity_list = SensitivityList(*args)
 		self.body = GenericCodeBlock()
 		self.if_list = IfList()
 		self.for_list = ForList()
 		self.case_list = CaseList()
+		self.wait_list = None
+		self.final_wait = final_wait
 	
 	def code(self, indent_level = 0):
 
+		print(self.final_wait)
+
 		hdl_code = ""
 
-		if self.body or self.if_list or self.for_list or self.case_list:
-			if(self.name == ""):
+		if self.body or self.if_list or self.for_list or \
+			self.case_list or self.final_wait:
+
+			if(self.name == "" and self.sensitivity_list):
 				hdl_code = hdl_code + indent(indent_level) + \
 						"process(" + \
 						self.sensitivity_list.code() + \
 						")\n"
 
-			else:
+			elif(self.name != "" and self.sensitivity_list):
 				hdl_code = hdl_code + indent(indent_level) + \
 						self.name + " : process(" + \
 						self.sensitivity_list.code() + \
 						")\n"
 
+			elif(self.name == "" and not self.sensitivity_list):
+				hdl_code = hdl_code + indent(indent_level) + \
+						"process\n"
+
+			elif(self.name != "" and not self.sensitivity_list):
+				hdl_code = hdl_code + indent(indent_level) + \
+						self.name + " : process\n"
+
 			hdl_code = hdl_code + indent(indent_level) + "begin\n\n"
 
-			hdl_code = hdl_code + self.body.code(indent_level + 1)
+			if self.body:
+				hdl_code = hdl_code + self.body.code(
+					indent_level + 1)
 
-			hdl_code = hdl_code + self.if_list.code(indent_level \
-						+ 1)
-			hdl_code = hdl_code + self.for_list.code(indent_level \
-						+ 1)
-			hdl_code = hdl_code + self.case_list.code(indent_level \
-						+ 1)
+			if self.if_list:
+				hdl_code = hdl_code + self.if_list.code(
+						indent_level + 1)
+			if self.for_list:
+				hdl_code = hdl_code + self.for_list.code(
+						indent_level + 1)
+			if self.case_list:
+				hdl_code = hdl_code + self.case_list.code(
+						indent_level + 1)
+			if self.final_wait:
+				hdl_code = hdl_code + indent(indent_level + 1) \
+						+ "wait;\n\n"
+
 			hdl_code = hdl_code + indent(indent_level) + \
 					"end process " + self.name + ";\n\n"
 
@@ -71,8 +94,8 @@ class Process:
 
 class ProcessList(dict):
 
-	def add(self, name : str = "", *args):
-		self[name] = Process(name, *args)
+	def add(self, name : str = "", final_wait = False, *args):
+		self[name] = Process(name, final_wait, *args)
 
 	def code(self, indent_level : int = 0):
 		return DictCode(self, indent_level)
