@@ -84,4 +84,4 @@ class ConstantList(dict):
 			Level of indentation to insert before the string
 		"""
 
-		return DictCode(self)
+		return DictCode(self, indent_level)
