@@ -68,7 +68,7 @@ class VariableList(dict):
 					variabeles
 	"""
 
-	def add(self, name, type, *args):
+	def add(self, name, var_type, *args):
 
 		"""
 		Add a variable object to the dictionary.
@@ -84,7 +84,7 @@ class VariableList(dict):
 			practice only the first is used.
 		"""
 
-		self[name] = VariableObj(name, type, *args)
+		self[name] = VariableObj(name, var_type, *args)
 
 	def code(self, indent_level : int = 0) -> str:
 
