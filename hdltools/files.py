@@ -34,9 +34,3 @@ class FileList(dict):
 	def code(self, indent_level : int = 0) -> str:
 
 		return DictCode(self, indent_level)
-
-
-a = FileList()
-a.add()
-
-print(a.code(3))
