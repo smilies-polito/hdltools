@@ -109,20 +109,3 @@ class ProcessList(dict):
 
 	def code(self, indent_level : int = 0):
 		return DictCode(self, indent_level)
-
-
-
-a = ProcessList()
-
-a.add("clk_gen")
-
-a["clk_gen"].variables.add(
-	name			= "write_line",
-	var_type		= "line",
-)
-a["clk_gen"].files.add()
-
-a["clk_gen"].body.add("clk <= '1';")
-
-
-print(a.code())
