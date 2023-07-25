@@ -1,6 +1,8 @@
 from text import SingleCodeLine, GenericCodeBlock
 from dict_code import VHDLenum, DictCode
 from format_text import indent
+from variables import VariableList
+from files import FileList
 from if_statement import IfList
 from for_statement import ForList
 from case_statement import CaseList
@@ -32,6 +34,8 @@ class Process:
 	def __init__(self, name = "", final_wait = False, *args):
 		self.name = name
 		self.sensitivity_list = SensitivityList(*args)
+		self.variables = VariableList()
+		self.files = FileList()
 		self.body = GenericCodeBlock()
 		self.if_list = IfList()
 		self.for_list = ForList()
@@ -40,8 +44,6 @@ class Process:
 		self.final_wait = final_wait
 	
 	def code(self, indent_level = 0):
-
-		print(self.final_wait)
 
 		hdl_code = ""
 
@@ -67,6 +69,14 @@ class Process:
 			elif(self.name != "" and not self.sensitivity_list):
 				hdl_code = hdl_code + indent(indent_level) + \
 						self.name + " : process\n"
+
+			if self.variables:
+				hdl_code = hdl_code + self.variables.\
+						code(indent_level + 1)
+
+			if self.files:
+				hdl_code = hdl_code + self.files.\
+						code(indent_level + 1)
 
 			hdl_code = hdl_code + indent(indent_level) + "begin\n\n"
 
@@ -99,3 +109,20 @@ class ProcessList(dict):
 
 	def code(self, indent_level : int = 0):
 		return DictCode(self, indent_level)
+
+
+
+a = ProcessList()
+
+a.add("clk_gen")
+
+a["clk_gen"].variables.add(
+	name			= "write_line",
+	var_type		= "line",
+)
+a["clk_gen"].files.add()
+
+a["clk_gen"].body.add("clk <= '1';")
+
+
+print(a.code())
