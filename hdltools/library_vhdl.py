@@ -12,7 +12,7 @@ class PackageObj:
 				package
 	"""
 
-	def __init__(self, name : str, *args : str):
+	def __init__(self, name : str, std = False, *args : str):
 
 		"""
 		Parameters:
@@ -26,6 +26,7 @@ class PackageObj:
 
 		self.source = "File Location Unknown."
 		self.name = name
+		self.std = std
 
 		if args:
 			# In practice only the first operator is considered
@@ -53,8 +54,14 @@ class PackageObj:
 
 		hdl_code = ""
 
-		hdl_code = hdl_code + indent(indent_level) + ("use %s.%s.%s;\n"
-				% (libname, self.name, self.operator))
+		if self.std:
+			hdl_code = hdl_code + indent(indent_level) + ("use "
+				"std.%s.%s;\n" % (self.name, self.operator))
+
+		else:
+			hdl_code = hdl_code + indent(indent_level) + ("use "
+				"%s.%s.%s;\n" % (libname, self.name,
+				self.operator))
 
 		return hdl_code
 
@@ -72,7 +79,7 @@ class PackageList(dict):
 
 	"""
 
-	def add(self, name : str, *args : str):
+	def add(self, name : str, std = False, *args : str):
 
 		"""
 		Add a package object to the dictionary.
@@ -85,7 +92,7 @@ class PackageList(dict):
 			
 		"""
 
-		self[name] = PackageObj(name, *args)
+		self[name] = PackageObj(name, std, *args)
 
 
 	def code(self, libname : str = "ieee", indent_level : int = 0) -> str:
