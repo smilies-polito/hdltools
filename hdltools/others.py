@@ -21,7 +21,6 @@ import os
 import copy
 
 # TODO:
-# Process
 # Procedures
 # Block
 # Protected Types
