@@ -56,24 +56,24 @@ class For:
 			# The loop has a name
 			if(self.name == ""):
 				hdl_code = hdl_code + indent(indent_level) + \
-						"for(" + self.iter_name + " in "
+						"for " + self.iter_name + " in "
 
 			# The loop has not a name
 			else:
 				hdl_code = hdl_code + indent(indent_level) + \
-						self.name + " : for(" + \
+						self.name + " : for " + \
 						self.iter_name + " in "
 
 			# From higher to lower index
 			if(self.direction == "down"):
 				hdl_code = hdl_code + str(self.start) + \
 						" downto " + str(self.stop) + \
-						")\n"
+						"\n"
 
 			# From lower to higher index
 			else:
 				hdl_code = hdl_code + str(self.start) + " to " \
-						+ str(self.stop) + ")\n"
+						+ str(self.stop) + "\n"
 
 			
 
