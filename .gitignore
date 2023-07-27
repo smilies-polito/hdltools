@@ -5,3 +5,20 @@ hdltools/examples/output
 /_Alert.txt
 /_Log.txt
 /out.xml
+
+# Vivado simulation files
+*.jou
+*.log
+*.pb
+*.dir
+*.str
+*.cache
+*.hw
+*.ip_user_files
+*.sim
+*.xpr
+*.runs
+*.zip
+*.srcs
+*.gen
+.Xil
