@@ -36,19 +36,20 @@ class Process:
 		self.sensitivity_list = SensitivityList(*args)
 		self.variables = VariableList()
 		self.files = FileList()
-		self.body = GenericCodeBlock()
+		self.bodyHeader = GenericCodeBlock()
 		self.if_list = IfList()
 		self.for_list = ForList()
 		self.case_list = CaseList()
 		self.wait_list = None
+		self.bodyFooter = GenericCodeBlock()
 		self.final_wait = final_wait
 	
 	def code(self, indent_level = 0):
 
 		hdl_code = ""
 
-		if self.body or self.if_list or self.for_list or \
-			self.case_list or self.final_wait:
+		if self.bodyHeader or self.if_list or self.for_list or \
+			self.case_list or self.bodyFooter or self.final_wait:
 
 			if(self.name == "" and self.sensitivity_list):
 				hdl_code = hdl_code + indent(indent_level) + \
@@ -80,8 +81,8 @@ class Process:
 
 			hdl_code = hdl_code + indent(indent_level) + "begin\n\n"
 
-			if self.body:
-				hdl_code = hdl_code + self.body.code(
+			if self.bodyHeader:
+				hdl_code = hdl_code + self.bodyHeader.code(
 					indent_level + 1)
 
 			if self.if_list:
@@ -93,6 +94,11 @@ class Process:
 			if self.case_list:
 				hdl_code = hdl_code + self.case_list.code(
 						indent_level + 1)
+
+			if self.bodyFooter:
+				hdl_code = hdl_code + self.bodyFooter.code(
+					indent_level + 1)
+
 			if self.final_wait:
 				hdl_code = hdl_code + indent(indent_level + 1) \
 						+ "wait;\n\n"
