@@ -11,7 +11,7 @@ class VariableObj:
 	code(indent_level = 0)	: generate the string to declare the variable
 	"""
 
-	def __init__(self, name : str, var_type : str, *args : str):
+	def __init__(self, name : str, var_type : str, value : str = ""):
 
 		"""
 		Parameters:
@@ -27,11 +27,7 @@ class VariableObj:
 
 		self.name = name
 		self.var_type = var_type
-
-		if args:
-			self.value = args[0]
-		else:
-			self.value = ""
+		self.value = value
 
 
 	def code(self, indent_level : int = 0):
@@ -68,7 +64,7 @@ class VariableList(dict):
 					variabeles
 	"""
 
-	def add(self, name, var_type, *args):
+	def add(self, name, var_type, value = ""):
 
 		"""
 		Add a variable object to the dictionary.
@@ -84,7 +80,7 @@ class VariableList(dict):
 			practice only the first is used.
 		"""
 
-		self[name] = VariableObj(name, var_type, *args)
+		self[name] = VariableObj(name, var_type, value)
 
 	def code(self, indent_level : int = 0) -> str:
 
