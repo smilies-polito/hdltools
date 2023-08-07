@@ -133,7 +133,7 @@ class If_block:
 			hdl_code = hdl_code + indent(indent_level) + "if(" + \
 					self.conditions.code() + ")\n"
 			hdl_code = hdl_code + indent(indent_level) + "then\n\n"
-			hdl_code = hdl_code + self.body.code(indent_level + 1) + "\n"
+			hdl_code = hdl_code + self.body.code(indent_level + 1)
 
 		return hdl_code
 
@@ -173,7 +173,6 @@ class Elsif_block:
 					self.conditions.code() + ")\n"
 			hdl_code = hdl_code + indent(indent_level) + "then\n\n"
 			hdl_code = hdl_code + self.body.code(indent_level + 1)
-			hdl_code = hdl_code + "\n"
 
 		return hdl_code
 
@@ -248,7 +247,6 @@ class Else_block:
 		if self.body:
 			hdl_code = hdl_code + indent(indent_level) + "else\n"
 			hdl_code = hdl_code + self.body.code(indent_level + 1)
-			hdl_code = hdl_code + "\n"
 
 		return hdl_code
 
@@ -298,7 +296,7 @@ class If():
 					self._else_.code(indent_level)
 
 			hdl_code = hdl_code + indent(indent_level) + \
-					"end if;\n\n"
+					"end if;\n"
 
 		return hdl_code
 
