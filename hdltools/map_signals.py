@@ -122,7 +122,8 @@ class MapList(dict):
 
 
 		else:
-			print("Signal not present in component\n")
+			print("Signal %s not present in component\n" %
+					(target_name))
 
 
 
