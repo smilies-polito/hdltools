@@ -130,8 +130,8 @@ class If_block:
 		# Generate code only if the condition and body contain something
 		if self.conditions and self.body:
 
-			hdl_code = hdl_code + indent(indent_level) + "if(" + \
-					self.conditions.code() + ")\n"
+			hdl_code = hdl_code + indent(indent_level) + "if " + \
+					self.conditions.code() + "\n"
 			hdl_code = hdl_code + indent(indent_level) + "then\n\n"
 			hdl_code = hdl_code + self.body.code(indent_level + 1)
 
