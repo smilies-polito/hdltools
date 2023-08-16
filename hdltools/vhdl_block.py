@@ -12,6 +12,7 @@ class VHDLblock:
 		self.fileHeader = GenericCodeBlock()
 		self.fileHeader.add(LicenseText)
 		self.library = LibraryList()
+		self.postLibraryHeader = GenericCodeBlock()
 		self.work = PackageList()
 		self.entity = Entity(entity_name)
 		self.architecture = Architecture(architecture_name, entity_name)
@@ -44,6 +45,7 @@ class VHDLblock:
 		hdl_code = ""
 		hdl_code = hdl_code + self.fileHeader.code()
 		hdl_code = hdl_code + self.library.code()
+		hdl_code = hdl_code + self.postLibraryHeader.code()
 		hdl_code = hdl_code + self.work.code()
 		hdl_code = hdl_code + self.entity.code()
 		hdl_code = hdl_code + self.architecture.code()
