@@ -79,8 +79,8 @@ class For:
 
 			hdl_code = hdl_code + indent(indent_level) + "loop\n" 
 
-			hdl_code = hdl_code + indent(indent_level + 1) + \
-					self.body.code() + "\n"
+			hdl_code = hdl_code + self.body.code(indent_level + 1) \
+					+ "\n"
 
 			hdl_code = hdl_code + indent(indent_level) + \
 					"end loop " + self.name + ";\n\n"
