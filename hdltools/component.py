@@ -53,15 +53,6 @@ class ComponentObj:
 					self.generic.code(indent_level + 2)
 			hdl_code = hdl_code + \
 					indent(indent_level+1) + (");\n")
-		else:
-			hdl_code = hdl_code + \
-					indent(indent_level+1) + \
-					("--generic (\n")
-			hdl_code = hdl_code + \
-					indent(indent_level+2) + \
-					("--generic_declaration_tag\n")
-			hdl_code = hdl_code + \
-					indent(indent_level+1) + ("--);\n")
 		if (self.port):
 			hdl_code = hdl_code + \
 					indent(indent_level+1) + ("port (\n")
@@ -69,14 +60,6 @@ class ComponentObj:
 					self.port.code(indent_level+2)
 			hdl_code = hdl_code + \
 					indent(indent_level+1) + (");\n")
-		else:
-			hdl_code = hdl_code + \
-					indent(indent_level+1) + ("--port (\n")
-			hdl_code = hdl_code + \
-					indent(indent_level+2) + \
-					("--port_declaration_tag\n")
-			hdl_code = hdl_code + \
-					indent(indent_level+1) + ("--);\n")
 
 		hdl_code = hdl_code + \
 				indent(indent_level) + \
