@@ -4,8 +4,7 @@ from entity import Entity
 from architecture import Architecture
 from instance import Instance
 from license_text import LicenseText
-
-import os
+from write_file import write_file
 
 class VHDLblock:
 	def __init__(self, entity_name, architecture_name = "behavior"):
@@ -26,20 +25,9 @@ class VHDLblock:
 	def declaration(self):
 		return self.dec_object()
 
-	def write_file(self, output_dir = "output"):
-		hdl_code = self.code()
+	def write_file(self, output_dir = "output", rm = False):
+		write_file(self, output_dir = output_dir, rm = rm)
 
-		if (not os.path.exists(output_dir)):
-			os.makedirs(output_dir)
-
-		output_file_name = output_dir + "/" + self.entity.name+".vhd"
-
-		with open(output_file_name, "w+") as fp:
-
-			for line in hdl_code:
-				fp.write(line)
-
-		return True
 
 	def code(self, indent_level=0):
 		hdl_code = ""

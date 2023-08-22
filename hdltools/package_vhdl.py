@@ -1,5 +1,5 @@
 from custom_types import CustomTypeList
-import os
+from write_file import write_file
 
 class PackageDeclaration():
 
@@ -34,18 +34,5 @@ class Package():
 
 		return hdl_code
 
-	def write_file(self, output_dir = "output"):
-
-		hdl_code = self.code()
-
-		if (not os.path.exists(output_dir)):
-			os.makedirs(output_dir)
-
-		output_file_name = output_dir + "/" + self.name+".vhd"
-
-		with open(output_file_name, "w+") as fp:
-
-			for line in hdl_code:
-				fp.write(line)
-
-		return True
+	def write_file(self, output_dir = "output", rm = False):
+		write_file(self, output_dir = output_dir, rm = rm)
