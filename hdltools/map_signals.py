@@ -44,8 +44,8 @@ class MapList(dict):
 						source_name = source.name
 
 					else:
-						print("Error, wrong source in"
-							" signal mapping\n")
+						raise ValueError("Wrong source in"
+							" signal mapping")
 
 					target_name = self.elements_list[target].name
 
@@ -55,9 +55,8 @@ class MapList(dict):
 		elif mode == "key":
 
 			if len(kwargs) != len(self.elements_list):
-				print("Error, wrong number of elements in"
-						" signals mapping\n")
-				exit(-1)
+				raise ValueError("Wrong number of elements in"
+						" signals mapping")
 
 			
 			for target in self.elements_list:
@@ -72,8 +71,8 @@ class MapList(dict):
 							kwargs[target].name
 
 					else:
-						print("Error, wrong source in"
-							" signal mapping\n")
+						raise ValueError("Wrong source in"
+							" signal mapping")
 
 					target_name = self.elements_list[target].name
 
@@ -81,16 +80,14 @@ class MapList(dict):
 							source_name)
 
 				else:
-					print("Error, signal not mapped\n")
-					exit(-1)
+					raise ValueError("Signal not mapped")
 
 
 		elif mode == "no":
 			pass
 
 		else:
-			print("Wrong instance mode\n")
-			exit(-1)
+			raise ValueError("Wrong instance mode")
 
 
 	def add(self, target_name, source, conn_range = ""):
@@ -117,15 +114,11 @@ class MapList(dict):
 					conn_range)
 
 			else:
-				print("Error, wrong source in signal mapping\n")
-				exit(-1)
+				raise ValueError("Wrong source in signal mapping")
 
 
 		else:
-			print("Signal %s not present in component\n" %
-					(target_name))
-
-
+			raise ValueError("Signal " + target_name + " not present")
 
 
 
