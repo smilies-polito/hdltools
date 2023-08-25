@@ -72,26 +72,8 @@ class ComponentObj:
 
 class ComponentList(dict):
 
-	"""
-	Dictionary of VHDL components.
-
-	Methods:
-	--------
-	add(name)		: add a port object to the dictionary
-	code(indent_level = 0)	: generate the string to declare all the ports
-	"""
-
-	def add(self, name : str):
-		"""
-		Add a component object to the dictionary.
-
-		Parameters:
-		-----------
-		name		: str
-			Name of the port
-		"""
-
-		self[name] = ComponentObj(name)
+	def add(self, vhdl_block):
+		self[vhdl_block.entity.name] = ComponentObj(vhdl_block)
 
 	def code(self, indent_level : int = 0):
 
