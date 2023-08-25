@@ -82,6 +82,15 @@ class MapList(dict):
 				else:
 					raise ValueError("Signal not mapped")
 
+		elif mode == "self":
+
+			for key in self.elements_list:
+
+				name	= self.elements_list[key].name
+				value	= str(self.elements_list[key].value)
+
+				self[name] = MapObj(name, value)
+
 
 		elif mode == "no":
 			pass
