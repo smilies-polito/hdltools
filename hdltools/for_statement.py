@@ -13,7 +13,8 @@ class For:
 	"""
 
 	def __init__(self, name : str = "", start : int = 0, stop : int = 1,
-			iter_name : str= "i", direction : str= "up"):
+			iter_name : str= "i", direction : str= "up", 
+			loop_type = "loop"):
 
 		"""
 		Parameters:
@@ -36,6 +37,7 @@ class For:
 		self.iter_name = iter_name
 		self.direction = direction
 		self.body = GenericCodeBlock()
+		self.loop_type = loop_type
 
 	def code(self, indent_level = 0):
 
@@ -77,13 +79,22 @@ class For:
 
 			
 
-			hdl_code = hdl_code + indent(indent_level) + "loop\n" 
+			if self.loop_type == "loop":
+				hdl_code = hdl_code + indent(indent_level) + \
+						"loop\n" 
+			else:
+				hdl_code = hdl_code + indent(indent_level) + \
+						"generate\n" 
 
 			hdl_code = hdl_code + self.body.code(indent_level + 1) \
 					+ "\n"
 
-			hdl_code = hdl_code + indent(indent_level) + \
+			if self.loop_type == "loop":
+				hdl_code = hdl_code + indent(indent_level) + \
 					"end loop " + self.name + ";\n\n"
+			else:
+				hdl_code = hdl_code + indent(indent_level) + \
+					"end generate " + self.name + ";\n\n"
 
 		return hdl_code
 
