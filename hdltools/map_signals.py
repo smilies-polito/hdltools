@@ -55,6 +55,14 @@ class MapList(dict):
 		elif mode == "key":
 
 			if len(kwargs) != len(self.elements_list):
+
+				mapped = []
+				for key in kwargs:
+					mapped.append(key)
+
+				print("Elements to map: " +
+					str(self.elements_list) + "\nElements"
+					" mapped: " + str(mapped) + "\n")
 				raise ValueError("Wrong number of elements in"
 						" signals mapping")
 
