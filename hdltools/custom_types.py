@@ -60,9 +60,10 @@ class ArrayTypeObj:
 		self.arrayRange = args[0]
 		self.arrayType = args[1]
 
-	def code(self):
+	def code(self, indent_level = 1):
 		hdl_code = ""
-		hdl_code = indent(1) + "type %s is array (%s) of %s;\n" % (self.name, self.arrayRange, self.arrayType)
+		hdl_code = indent(indent_level) + "type %s is array (%s) of "\
+		"%s;\n" % (self.name, self.arrayRange, self.arrayType)
 		hdl_code = hdl_code + "\n"
 		return hdl_code
 
@@ -115,6 +116,7 @@ class CustomTypeList(dict):
 	def add(self, name, c_type, *args):
 		if "Array" in c_type:
 			self[name] = ArrayTypeObj(name, *args)
+
 		elif "Enumeration" in c_type:
 			self[name] = EnumerationTypeObj(name, *args)
 		elif "Record" in c_type:
