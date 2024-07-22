@@ -36,6 +36,11 @@ class Architecture:
 				self.declarationHeader.code(indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
+		if (self.customTypes):
+			hdl_code = hdl_code + self.customTypes.code(
+					indent_level + 1)
+			hdl_code = hdl_code + "\n"
+
 		if (self.constant):
 			hdl_code = hdl_code + self.constant.code(indent_level +
 					1)
@@ -44,11 +49,6 @@ class Architecture:
 		if (self.component):
 			hdl_code = hdl_code + self.component.code(indent_level +
 					1)
-			hdl_code = hdl_code + "\n"
-
-		if (self.customTypes):
-			hdl_code = hdl_code + self.customTypes.code(
-					indent_level + 1)
 			hdl_code = hdl_code + "\n"
 
 		if (self.signal):
